@@ -9,6 +9,9 @@ export default defineConfig({
         target:'http://localhost:3000',
         secure:false,
     },
+    headers:{
+      'Cross-Origin-Embedder-Policy': 'unsafe-none'
+    }
   }
 },
 
