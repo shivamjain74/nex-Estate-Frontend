@@ -1,5 +1,5 @@
 import React from 'react'
-import {GoogleAuthProvider, getAuth, signInWithPopup} from 'firebase/auth';
+import {GoogleAuthProvider, getAuth, signInWithRedirect} from 'firebase/auth';
 import {app} from '../firebase';
 import { useDispatch } from 'react-redux';
 import { signInSuccess } from '../redux/user/userSlice';
@@ -13,7 +13,7 @@ const OAuth = () => {
         const provider = new GoogleAuthProvider();
         const auth = getAuth(app);
 
-        const result = await signInWithPopup(auth,provider)
+        const result = await signInWithRedirect(auth,provider)
 
         const res = await fetch ('/api/auth/google', {
      method : 'POST',
