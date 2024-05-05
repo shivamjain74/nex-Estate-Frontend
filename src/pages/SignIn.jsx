@@ -42,7 +42,6 @@ import OAuth from '../components/OAuth';
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
-    
   };
 
   
