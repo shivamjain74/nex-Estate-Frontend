@@ -147,7 +147,7 @@ export default function CreateListing() {
         return setError('Discount price must be lower than regular price');
       setLoading(true);
       setError(false);
-      const res = await fetch(`http://localhost:3000/api/listing/update/${params.listingId}`, {
+      const res = await fetch(`https://nex-estate.onrender.com/api/listing/update/${params.listingId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
