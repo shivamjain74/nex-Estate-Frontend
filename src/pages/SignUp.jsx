@@ -4,29 +4,30 @@ import OAuth from '../components/OAuth';
 
 
  function SignUp() {
-  const [formData, setFormData]=useState({});
+  const [formData, setFormData]=useState({}); 
   const [error,setError]=useState(null);
   const [loading,setLoading]= useState(false);
   const navigate=useNavigate();
-  const handleChange = (e) =>{
+  const handleChange = (e) =>{              {/* on change event listener , all information is stored in piece of formdata*/}
      setFormData(
-    {
-          ...formData,
-          [e.target.id]:e.target.value,
+    {  
+          ...formData,                   // ...formdata(spread operator) is to save the state      
+          [e.target.id]:e.target.value,  // ensuring which id is changing store it, id are defined below's console.log(formdata) to show on the console
     }
      );
   };
-  const handleSubmit = async (e) => { 
-    e.preventDefault();
+  const handleSubmit = async (e) => {  
+    e.preventDefault(); {/*preventing refreshing the page on submitting the form */} 
     try {
       setLoading(true);
-    const res = await fetch('https://nex-estate.onrender.com/api/auth/signup',
+      {/*fetch method to request from api route*/}
+    const res = await fetch('/api/auth/signup',
     {
     method:'POST',
     headers:{
       'Content-Type':'application/json',
     },
-    body:JSON.stringify(formData),
+    body:JSON.stringify(formData), 
     });
     const data= await res.json();
     console.log(data);
@@ -50,7 +51,7 @@ import OAuth from '../components/OAuth';
     <div   className='p-3 max-w-lg mx-auto'>
     <h1 className='text-3xl text-center font-semibold my-7'>SignUp</h1>
     <form onSubmit={handleSubmit} className='flex flex-col gap-4 '>
-      <input type='text' placeholder='username' className='border p-3 rounded-lg' id='username'onChange={handleChange}/>
+      <input type='text' placeholder='username' className='border p-3 rounded-lg' id='username'onChange={handleChange}/> {/* on change event listener */}
       <input type='email' placeholder='email' className='border p-3 rounded-lg' id='email'onChange={handleChange}/>
       <input type='password' placeholder='password' className='border p-3 rounded-lg' id='password'onChange={handleChange}/>
 

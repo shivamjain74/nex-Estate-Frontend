@@ -16,12 +16,13 @@ import {
   deleteUserSuccess,
   signOutUserStart,
 } from '../redux/user/userSlice';
+import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 export default function Profile() {
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
-  const [file, setFile] = useState(undefined);
+  const [file, setFile] = useState(undefined); // for file
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
@@ -30,10 +31,10 @@ export default function Profile() {
   const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
 
-  // firebase storage
+// firebase storage
   // allow read;
   // allow write: if
-  // request.resource.size < 2 * 1024 * 1024 &&
+  // request.resource.size<2*1024*1024 && 
   // request.resource.contentType.matches('image/.*')
 
   useEffect(() => {
@@ -74,12 +75,14 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`https://nex-estate.onrender.com/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`http://localhost:3000/api/user/update/${currentUser._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+        withCredentials: true,
+        credentials: 'include',
       });
       const data = await res.json();
       if (data.success === false) {
@@ -97,9 +100,12 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`https://nex-estate.onrender.com/api/user/delete/${currentUser._id}`, {
+      const res = await fetch(`http://localhost:3000/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
+        withCredentials: true,
+        credentials: 'include',
       });
+
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
@@ -114,9 +120,10 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const res = await fetch('https://nex-estate.onrender.com/api/auth/signout',{credentials:'include'});
+      const res = await fetch('http://localhost:3000/api/auth/signout',{credentials:'include'});
       const data = await res.json();
-      console.log(data);  
+      console.log(data); 
+      Cookies.remove("access_token"); 
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
         return;
@@ -130,7 +137,7 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const res = await fetch(`https://nex-estate.onrender.com/api/user/listings/${currentUser._id}`);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
       if (data.success === false) {
         setShowListingsError(true);
@@ -145,8 +152,10 @@ export default function Profile() {
 
   const handleListingDelete = async (listingId) => {
     try {
-      const res = await fetch(`https://nex-estate.onrender.com/api/listing/delete/${listingId}`, {
+      const res = await fetch(`http://localhost:3000/api/listing/delete/${listingId}`, {
         method: 'DELETE',
+        withCredentials: true,
+        credentials: 'include',
       });
       const data = await res.json();
       if (data.success === false) {
@@ -161,6 +170,7 @@ export default function Profile() {
       console.log(error.message);
     }
   };
+  console.log(currentUser)
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
@@ -207,7 +217,7 @@ export default function Profile() {
           className='border p-3 rounded-lg'
           onChange={handleChange}
         />
-        <input
+        <input 
           type='password'
           placeholder='password'
           onChange={handleChange}

@@ -15,6 +15,8 @@ const Search = () => {
         order:'desc',
     });
 
+    console.log(sidebardata);
+
     const [loading,setLoading] = useState(false);
     const [listings,setListings] = useState([]);
     const [showMore,setShowMore] = useState(false);
@@ -53,7 +55,7 @@ const Search = () => {
                 setLoading(true);
                 setShowMore(false);
                 const searchQuery = urlParams.toString();
-                const res = await fetch(`https://nex-estate.onrender.com/api/listing/get?${searchQuery}`);
+                const res = await fetch(`http://localhost:3000/api/listing/get?${searchQuery}`);
                 const data = await res.json();
                 if(data.length>8){
                     setShowMore(true);
@@ -62,14 +64,9 @@ const Search = () => {
                 }
                 setListings(data);
                 setLoading(false);
-
         };
-
         fetchListings();
     },[location.search]);
-
-
-    
 
     const handleChange =(e)=>{
        if(e.target.id==='all' || e.target.id==='rent' || e.target.id ==='sale'){
@@ -94,7 +91,7 @@ const Search = () => {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         const urlParams = new URLSearchParams();
         urlParams.set('searchTerm', sidebardata.searchTerm);
         urlParams.set('type', sidebardata.type);
@@ -113,7 +110,7 @@ const Search = () => {
         const urlParams = new URLSearchParams(location.search);
         urlParams.set('startIndex',startIndex);
         const searchQuery = urlParams.toString();
-        const res = await fetch(`https://nex-estate.onrender.com/api/listing/get?${searchQuery}`);
+        const res = await fetch(`http://localhost:3000/api/listing/get?${searchQuery}`);
         const data = await res.json();
         if(data.length<9){
             setShowMore(false);
@@ -149,7 +146,6 @@ const Search = () => {
                     <span>offer</span>
                     </div>
                     </div>
-
                     <div className='flex gap-2 flex-wrap items-center'>
                     <label className='font-semibold'>Amenities:</label>
                     <div className='flex gap-2'>
@@ -161,7 +157,6 @@ const Search = () => {
                     <span>Furnished</span>
                     </div>
                     </div>
-
                     <div className='flex items-center gap-2'>
                         <label className='font-semibold'>Sort:</label>
                         <select onChange={handleChange} defaultValue={'created_at_desc'} id='sort_order' className='border rounded-lg p-3'>
@@ -171,7 +166,7 @@ const Search = () => {
                             <option value = 'createdAt_asc'>Oldest</option>
                         </select>
                     </div>
-
+                    
                     <button className='bg-slate-700 text-white p-3  rounded-lg uppercase hover:opacity-95'>Search</button>
             </form>
         </div>

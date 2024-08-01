@@ -1,13 +1,13 @@
 import  {createSlice} from '@reduxjs/toolkit';
 
-const initialState = {
-    currentUser:null,
+const initialState = { 
+    currentUser:null, // redux
     error:null,
     loading: false,
 };
 
 const userSlice = createSlice({
-     name:'user',
+     name:'user',                     // global state
      initialState,
      reducers:{
         signInStart:(state)=>{

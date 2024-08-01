@@ -132,8 +132,10 @@ export default function CreateListing() {
         return setError('Discount price must be lower than regular price');
       setLoading(true);
       setError(false);
-      const res = await fetch('https://nex-estate.onrender.com/api/listing/create', {
+      const res = await fetch('/api/listing/create', {
         method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -282,7 +284,7 @@ export default function CreateListing() {
               <div className='flex flex-col items-center'>
                 <p>Regular price</p>
                 {formData.type === 'rent' && (
-                  <span className='text-xs'>($ / month)</span>
+                  <span className='text-xs'>($/ month)</span>
                 )}
               </div>
             </div>

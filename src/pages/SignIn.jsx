@@ -3,12 +3,13 @@ import { Link,useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import {signInStart,signInSuccess,signInFailure} from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
+import Cookies from 'js-cookie';
 
 
 
  function SignIn() {
   const [formData, setFormData]=useState({});
-  const {loading , error } = useSelector((state) => state.user);
+  const {loading , error } = useSelector((state) => state.user); // react redux
   const navigate=useNavigate();
   const dispatch = useDispatch();
   const handleChange = (e) =>{
@@ -23,16 +24,19 @@ import OAuth from '../components/OAuth';
     e.preventDefault();
     try {
       dispatch(signInStart());
-    const res = await fetch('https://nex-estate.onrender.com/api/auth/signin',
+    const res = await fetch('http://localhost:3000/api/auth/signin',
     {
     method:'POST',
     headers:{
       'Content-Type':'application/json',
     },
+    withCredentials: true,
+    credentials: 'include',
     body:JSON.stringify(formData),
     });
     const data= await res.json();
     console.log(data);
+    Cookies.set("access_token",data?.token);
     if(data.success==false){
       dispatch(signInFailure(data.message));
       return;
@@ -43,8 +47,6 @@ import OAuth from '../components/OAuth';
       dispatch(signInFailure(error.message));
     }
   };
-
-  
   return (
     <div className='p-3 max-w-lg mx-auto'>
     <h1 className='text-3xl text-center font-semibold my-7'>SignIn</h1>
