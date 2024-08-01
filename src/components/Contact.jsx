@@ -13,7 +13,7 @@ export default function Contact({ listing }) {
     const fetchLandlord = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/user/${listing.userRef}`,
+          `https://nex-estate.onrender.com/api/user/${listing.userRef}`,
           { withCredentials: true, credentials: "include" }
         );
         const data = await res.json();
